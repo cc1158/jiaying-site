@@ -1,0 +1,57 @@
+name: 家映支持 / Jiaying Support
+description: 提交已匿名化的连接或使用问题 / Report an anonymized connection or usage problem
+title: "[Support] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 先保护你的隐私 / Protect your privacy first
+
+        这是公开 Issue。请勿提交密码、Token、真实服务器地址、设备标识或媒体名称。请使用示例地址并匿名化截图。
+
+        This is a public issue. Never post passwords, tokens, real server addresses, device identifiers, or media names. Use example addresses and anonymize screenshots.
+  - type: dropdown
+    id: platform
+    attributes:
+      label: 平台 / Platform
+      options:
+        - iPhone
+        - iPad
+        - Apple TV
+        - Website
+    validations:
+      required: true
+  - type: input
+    id: os-version
+    attributes:
+      label: 系统版本 / OS version
+      description: 只填写公开的系统版本号，例如 iOS 18.1。不要填写设备标识。
+      placeholder: iOS 18.1
+    validations:
+      required: true
+  - type: dropdown
+    id: source
+    attributes:
+      label: 来源 / Source
+      options:
+        - Family Media
+        - Jellyfin
+        - Built-in demo
+        - Not applicable
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: 问题描述 / Problem description
+      description: 说明操作步骤、预期结果和实际结果。请将地址替换为 example.local。
+      placeholder: 使用 example.local 的匿名化描述 / An anonymized description using example.local
+    validations:
+      required: true
+  - type: checkboxes
+    id: privacy-confirmation
+    attributes:
+      label: 隐私确认 / Privacy confirmation
+      options:
+        - label: 我已确认内容不含密码、Token、真实服务器地址、设备标识或媒体名称。 / I confirm this report contains no password, token, real server address, device identifier, or media name.
+          required: true

@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Jiaying support for installation, Local Network access, NAS and Jellyfin connections, and common problems.">
+  <link rel="canonical" href="https://cc1158.github.io/jiaying-site/en/support/">
+  <link rel="alternate" hreflang="zh-CN" href="https://cc1158.github.io/jiaying-site/support/">
+  <link rel="alternate" hreflang="en" href="https://cc1158.github.io/jiaying-site/en/support/">
+  <link rel="icon" href="../../assets/app-icon.png">
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <title>Support | Jiaying</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="../">Jiaying</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="../privacy/">Privacy</a>
+        <a href="./" aria-current="page">Support</a>
+        <a href="../../support/" lang="zh-CN" hreflang="zh-CN">中文</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <article class="document">
+      <header class="document-header">
+        <p class="eyebrow">Connection help</p>
+        <h1>Support</h1>
+        <p>Start by checking your device, network, and server. These steps cover the most common Jiaying connection problems.</p>
+      </header>
+
+      <section class="document-section">
+        <h2>Requirements</h2>
+        <ul>
+          <li>iPhone or iPad running iOS/iPadOS 18.0 or later.</li>
+          <li>Apple TV running tvOS 17.0 or later.</li>
+          <li>Network access from the device to your NAS, Family Media, or Jellyfin server.</li>
+          <li>Local Network access for Jiaying when first connecting to a home server.</li>
+        </ul>
+      </section>
+
+      <section class="document-section">
+        <h2>Connect your server</h2>
+        <ol>
+          <li>Confirm that the server is running and note its device-accessible address and port.</li>
+          <li>Place the Apple device on the same home network, or connect through a secure network you trust.</li>
+          <li>Add the Family Media address in Jiaying, or enter the Jellyfin address and sign in.</li>
+          <li>Open a folder, then test one photo and one video.</li>
+        </ol>
+        <div class="notice">
+          <p><strong>Do not enter localhost.</strong></p>
+          <p>On an iPhone, iPad, or Apple TV, localhost means that Apple device, not your NAS. Use a NAS hostname or local address the device can reach.</p>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>Common problems</h2>
+        <div class="troubleshooting">
+          <article>
+            <h3>The server cannot be reached</h3>
+            <p>Check Local Network permission, Wi-Fi, the server address and port, and whether the service is running. Also confirm that guest-network isolation is not blocking devices from reaching one another.</p>
+          </article>
+          <article>
+            <h3>Jellyfin sign-in fails</h3>
+            <p>Verify the same server address and account in a browser first. Jiaying does not store the Jellyfin password, so it must be entered again when signing in.</p>
+          </article>
+          <article>
+            <h3>A photo or video will not open</h3>
+            <p>Confirm that the original file exists and that the server can read it. Jellyfin can transcode some incompatible videos. Family Media does not transcode video.</p>
+          </article>
+          <article>
+            <h3>Settings are missing on another device</h3>
+            <p>This is expected. Jiaying stores configuration on each device and does not sync server addresses or Jellyfin sessions between devices.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>Contact support</h2>
+        <p>Email support will open before the App Store launch. Until then, use <a href="https://github.com/cc1158/jiaying-site/issues/new?template=support.yml">Jiaying Support Issues</a>.</p>
+        <div class="notice">
+          <p><strong>Do not post sensitive information in a public issue.</strong></p>
+          <p>Never include passwords, tokens, real server addresses, device identifiers, or media names. Use example addresses and anonymized descriptions.</p>
+        </div>
+        <!-- SUPPORT_EMAIL_PENDING -->
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <p>© 2026 Jiaying. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="../">Home</a>
+        <a href="../privacy/">Privacy</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="家映隐私政策，说明本机存储、Jellyfin 会话和家庭网络内的媒体传输方式。">
+  <link rel="canonical" href="https://cc1158.github.io/jiaying-site/privacy/">
+  <link rel="alternate" hreflang="zh-CN" href="https://cc1158.github.io/jiaying-site/privacy/">
+  <link rel="alternate" hreflang="en" href="https://cc1158.github.io/jiaying-site/en/privacy/">
+  <link rel="icon" href="../assets/app-icon.png">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <title>隐私政策 | 家映</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="../">家映</a>
+      <nav class="site-nav" aria-label="主要导航">
+        <a href="./" aria-current="page">隐私</a>
+        <a href="../support/">支持</a>
+        <a href="../en/privacy/" lang="en" hreflang="en">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <article class="document">
+      <header class="document-header">
+        <p class="eyebrow">家映</p>
+        <h1>隐私政策</h1>
+        <p>家映用于访问你自己选择的家庭媒体服务器。我们把数据最小化和本地处理作为基本原则。</p>
+        <p class="updated">生效日期：2026 年 9 月 1 日</p>
+      </header>
+
+      <section class="document-section">
+        <h2>简要说明</h2>
+        <p><strong>家映不跟踪你，不展示广告，也不向开发者收集个人数据。</strong>你的媒体内容只在安装家映的设备与你指定的 NAS、Family Media 或 Jellyfin 服务器之间传输。</p>
+      </section>
+
+      <section class="document-section">
+        <h2>我们不收集的数据</h2>
+        <p>家映不包含广告 SDK、行为分析、跨站追踪器或开发者运营的数据收集服务。开发者不会接收你的照片、视频、服务器地址、账号、观看记录或设备标识。</p>
+        <p>本网站不使用 Cookie、分析服务、第三方脚本或表单。</p>
+      </section>
+
+      <section class="document-section">
+        <h2>App 在本机保存的内容</h2>
+        <ul>
+          <li>服务器地址、来源配置和播放偏好保存在设备的 UserDefaults 中。</li>
+          <li>Jellyfin 用户名、用户 ID 和会话 Token 保存在系统 Keychain 中。</li>
+          <li>Jellyfin 密码只用于登录请求，不会持久化保存。</li>
+          <li>iPhone、iPad 和 Apple TV 分别保存自己的配置，家映不会在设备之间同步这些信息。</li>
+        </ul>
+      </section>
+
+      <section class="document-section">
+        <h2>网络连接与媒体传输</h2>
+        <p>家映会按照你的配置访问 Family Media 或 Jellyfin。浏览请求、缩略图、照片、视频和播放状态只在设备与所选服务器之间传输。开发者不运营中转服务器，也无法查看这些内容。</p>
+        <p>在 Apple 设备上，家映会请求本地网络权限，用于发现或连接家庭网络中的服务器。是否允许由你控制。</p>
+      </section>
+
+      <section class="document-section">
+        <h2>数据共享与保留</h2>
+        <p>由于开发者不收集个人数据，因此不会出售或与第三方共享这些数据。退出 Jellyfin 或移除对应配置时，家映会清除保存的会话。系统卸载和 Keychain 数据的后续处理由 Apple 平台决定。</p>
+      </section>
+
+      <section class="document-section">
+        <h2>安全建议</h2>
+        <p>请仅连接你信任的服务器。不要将缺少身份验证的家庭媒体服务直接暴露到公共互联网。需要远程访问时，请使用你了解并信任的安全网络方案。</p>
+      </section>
+
+      <section class="document-section">
+        <h2>政策更新与联系</h2>
+        <p>如果家映的数据处理方式发生变化，本页面会同步更新并标注新的生效日期。邮件支持将在 App Store 上线前开放。目前可通过<a href="https://github.com/cc1158/jiaying-site/issues/new?template=support.yml">家映支持 Issues</a>联系开发者。提交前请先阅读支持页的隐私提示。</p>
+        <!-- SUPPORT_EMAIL_PENDING -->
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <p>© 2026 家映。保留所有权利。</p>
+      <div class="footer-links">
+        <a href="../">首页</a>
+        <a href="../support/">技术支持</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

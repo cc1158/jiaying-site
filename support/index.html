@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="家映技术支持，包括安装要求、局域网权限、NAS 与 Jellyfin 连接以及常见问题。">
+  <link rel="canonical" href="https://cc1158.github.io/jiaying-site/support/">
+  <link rel="alternate" hreflang="zh-CN" href="https://cc1158.github.io/jiaying-site/support/">
+  <link rel="alternate" hreflang="en" href="https://cc1158.github.io/jiaying-site/en/support/">
+  <link rel="icon" href="../assets/app-icon.png">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <title>技术支持 | 家映</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="../">家映</a>
+      <nav class="site-nav" aria-label="主要导航">
+        <a href="../privacy/">隐私</a>
+        <a href="./" aria-current="page">支持</a>
+        <a href="../en/support/" lang="en" hreflang="en">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <article class="document">
+      <header class="document-header">
+        <p class="eyebrow">连接与排障</p>
+        <h1>技术支持</h1>
+        <p>先确认设备、网络和服务器状态。下面的步骤覆盖家映最常见的连接问题。</p>
+      </header>
+
+      <section class="document-section">
+        <h2>运行要求</h2>
+        <ul>
+          <li>iPhone 或 iPad 需要 iOS/iPadOS 18.0 或更高版本。</li>
+          <li>Apple TV 需要 tvOS 17.0 或更高版本。</li>
+          <li>设备应能访问你配置的 NAS、Family Media 或 Jellyfin 服务器。</li>
+          <li>首次连接家庭网络服务器时，请允许家映使用本地网络。</li>
+        </ul>
+      </section>
+
+      <section class="document-section">
+        <h2>开始连接</h2>
+        <ol>
+          <li>确认服务器已经启动，并记下设备可访问的服务器地址和端口。</li>
+          <li>让 Apple 设备与服务器处于同一家庭网络，或连接到你信任的安全网络。</li>
+          <li>在家映中添加 Family Media 地址，或输入 Jellyfin 地址后登录。</li>
+          <li>打开一个文件夹，再分别尝试一张照片和一个视频。</li>
+        </ol>
+        <div class="notice">
+          <p><strong>不要填写 localhost。</strong></p>
+          <p>在 iPhone、iPad 或 Apple TV 中，localhost 指向当前设备，不是你的 NAS。请使用设备能够访问的 NAS 主机名或局域网地址。</p>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>常见问题</h2>
+        <div class="troubleshooting">
+          <article>
+            <h3>无法连接服务器</h3>
+            <p>检查本地网络权限、Wi-Fi、服务器地址、端口和服务运行状态。也请确认路由器没有启用阻止设备互访的访客网络隔离。</p>
+          </article>
+          <article>
+            <h3>Jellyfin 登录失败</h3>
+            <p>先在浏览器中验证相同服务器地址和账号。家映不会保存 Jellyfin 密码，重新登录时需要再次输入。</p>
+          </article>
+          <article>
+            <h3>照片或视频无法打开</h3>
+            <p>确认原文件仍存在且服务器有读取权限。Jellyfin 可为部分不兼容视频提供转码，Family Media 本身不负责视频转码。</p>
+          </article>
+          <article>
+            <h3>更换设备后没有原来的配置</h3>
+            <p>这是预期行为。家映将配置保存在各设备本机，不会把服务器地址或 Jellyfin 会话同步到其他设备。</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>联系支持</h2>
+        <p>邮件支持将在 App Store 上线前开放。目前请使用<a href="https://github.com/cc1158/jiaying-site/issues/new?template=support.yml">家映支持 Issues</a>提交问题。</p>
+        <div class="notice">
+          <p><strong>公开 Issue 中不要提交敏感信息。</strong></p>
+          <p>请勿填写密码、Token、真实服务器地址、设备标识或媒体名称。可以使用示例地址和经过匿名处理的描述。</p>
+        </div>
+        <!-- SUPPORT_EMAIL_PENDING -->
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <p>© 2026 家映。保留所有权利。</p>
+      <div class="footer-links">
+        <a href="../">首页</a>
+        <a href="../privacy/">隐私政策</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
