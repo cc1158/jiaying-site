@@ -30,20 +30,19 @@ python3 -m http.server 8000
 
 GitHub Actions 会在每次推送和 Pull Request 中运行预览模式校验，检查页面语言、内部链接、安全约束和必需的隐私声明。
 
-## App Store 提审前配置邮箱
+## App Store 支持邮箱
 
-当前源码包含 `SUPPORT_EMAIL_PENDING`，并在页面中说明邮件支持尚未开放。此状态可以发布预览站点，但不能用于 App Store 提审。
+当前中英文隐私政策与支持页面使用专用邮箱 `familymedia_app@163.com`。邮箱链接在两个语言版本中保持一致。
 
-获得真实专用邮箱后：
+更换支持邮箱时：
 
-1. 在中英文支持页和隐私政策联系段落中替换待开放文案。
-2. 在中英文支持页各加入指向同一地址的有效 `mailto:` 链接。
-3. 删除仓库中的所有 `SUPPORT_EMAIL_PENDING` 标记。
-4. 验证邮箱能够实际收发邮件。
-5. 先运行 `python3 scripts/validate_site.py`，再运行 `python3 scripts/validate_site.py --app-store-ready`。
-6. 确认线上页面已经更新后，再把 Privacy Policy URL 与 Support URL 填入 App Store Connect。
+1. 同时更新中英文支持页和隐私政策联系段落。
+2. 确认中英文支持页使用同一个有效 `mailto:` 地址。
+3. 验证新邮箱能够实际收发邮件。
+4. 先运行 `python3 scripts/validate_site.py`，再运行 `python3 scripts/validate_site.py --app-store-ready`。
+5. 确认线上页面已经更新后，再在 App Store Connect 中使用 Support URL 与 Privacy Policy URL。
 
-`--app-store-ready` 会拒绝待配置标记、无效或不一致的邮箱，并检查六个公开页面和 GitHub Issues 支持入口是否可访问。
+`--app-store-ready` 会拒绝待配置状态、无效或不一致的邮箱，并检查六个公开页面和 GitHub Issues 支持入口是否可访问。
 
 ## 隐私与 Issue 内容
 

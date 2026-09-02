@@ -200,7 +200,7 @@ def validate_pages(app_store_ready: bool) -> list[str]:
     for page in support_pages:
         source = (ROOT / page).read_text(encoding="utf-8")
         if source.count(ISSUE_URL_PREFIX) != 1:
-            errors.append(f"{page}: expected exactly one temporary GitHub Issues support link")
+            errors.append(f"{page}: expected exactly one GitHub Issues support link")
     all_sources = "\n".join(
         path.read_text(encoding="utf-8")
         for path in ROOT.rglob("*")
@@ -219,12 +219,18 @@ def validate_pages(app_store_ready: bool) -> list[str]:
             if mailbox.endswith(("@example.com", "@example.org", "@example.net")):
                 errors.append("app-store-ready: placeholder email domains are not allowed")
     else:
-        for page in support_pages:
-            source = (ROOT / page).read_text(encoding="utf-8")
-            if PENDING_MARKER not in source:
-                errors.append(f"{page}: missing pending-email marker")
-            if collected_mailboxes.get(page):
-                errors.append(f"{page}: mailto link must not be published while email is pending")
+        support_sources = [(ROOT / page).read_text(encoding="utf-8") for page in support_pages]
+        pending_states = [PENDING_MARKER in source for source in support_sources]
+        support_mailboxes = [collected_mailboxes.get(path, set()) for path in support_pages]
+        if any(pending_states) and not all(pending_states):
+            errors.append("preview: Chinese and English support pages must use the same email state")
+        elif all(pending_states):
+            if any(support_mailboxes):
+                errors.append("preview: mailto links must not be published while email is pending")
+        elif any(len(mailboxes) != 1 for mailboxes in support_mailboxes):
+            errors.append("preview: configured Chinese and English support pages each need one valid mailto link")
+        elif support_mailboxes[0] != support_mailboxes[1]:
+            errors.append("preview: Chinese and English support pages must use the same mailbox")
 
     return errors
 
