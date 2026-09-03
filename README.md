@@ -7,11 +7,15 @@
 ## 公开地址
 
 - 中文首页：<https://cc1158.github.io/jiaying-site/>
+- 中文下载与安装：<https://cc1158.github.io/jiaying-site/download/>
 - 中文隐私政策：<https://cc1158.github.io/jiaying-site/privacy/>
 - 中文技术支持：<https://cc1158.github.io/jiaying-site/support/>
 - English home: <https://cc1158.github.io/jiaying-site/en/>
+- English download and installation: <https://cc1158.github.io/jiaying-site/en/download/>
 - English privacy policy: <https://cc1158.github.io/jiaying-site/en/privacy/>
 - English support: <https://cc1158.github.io/jiaying-site/en/support/>
+
+NAS 服务端源码保持私有。经过验证的 Docker 镜像、独立程序、配置模板与 SHA-256 文件发布在公开的 [cc1158/jiaying-releases](https://github.com/cc1158/jiaying-releases) 仓库中，站点下载页只提供说明和下载链接，不在 Pages 仓库中保存大型二进制文件。
 
 ## 本地预览
 
@@ -28,7 +32,7 @@ python3 -m http.server 8000
 
 仓库使用 `main` 分支根目录发布 GitHub Pages。推送到 `main` 后，GitHub Pages 会自动构建静态文件。`.nojekyll` 确保带点目录和其他静态资源不会经过 Jekyll 处理。
 
-GitHub Actions 会在每次推送和 Pull Request 中运行预览模式校验，检查页面语言、内部链接、安全约束和必需的隐私声明。
+GitHub Actions 会在每次推送和 Pull Request 中运行预览模式校验，检查页面语言、内部链接、发布附件、安全约束和必需的隐私声明。
 
 ## App Store 支持邮箱
 
@@ -42,7 +46,7 @@ GitHub Actions 会在每次推送和 Pull Request 中运行预览模式校验，
 4. 先运行 `python3 scripts/validate_site.py`，再运行 `python3 scripts/validate_site.py --app-store-ready`。
 5. 确认线上页面已经更新后，再在 App Store Connect 中使用 Support URL 与 Privacy Policy URL。
 
-`--app-store-ready` 会拒绝待配置状态、无效或不一致的邮箱，并检查六个公开页面和 GitHub Issues 支持入口是否可访问。
+`--app-store-ready` 会拒绝待配置状态、无效或不一致的邮箱，并检查八个公开页面、GitHub Issues 支持入口、公开 Release 及五项附件是否可访问。
 
 ## 隐私与 Issue 内容
 

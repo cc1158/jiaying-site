@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Download and install the Jiaying Family Media server on a home NAS.">
+  <link rel="canonical" href="https://cc1158.github.io/jiaying-site/en/download/">
+  <link rel="alternate" hreflang="zh-CN" href="https://cc1158.github.io/jiaying-site/download/">
+  <link rel="alternate" hreflang="en" href="https://cc1158.github.io/jiaying-site/en/download/">
+  <link rel="icon" href="../../assets/app-icon.png">
+  <link rel="stylesheet" href="../../assets/styles.css">
+  <title>Download NAS Server | Jiaying</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="../">Jiaying</a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="./" aria-current="page">Download</a>
+        <a href="../privacy/">Privacy</a>
+        <a href="../support/">Support</a>
+        <a href="../../download/" lang="zh-CN" hreflang="zh-CN">中文</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <article class="document document-wide">
+      <header class="document-header">
+        <p class="eyebrow">Family Media</p>
+        <h1>Install the Jiaying server on your NAS</h1>
+        <p>The server is required when Family Media reads folders from your NAS. If you only connect to an existing Jellyfin server, you can skip this page.</p>
+      </header>
+
+      <section class="release-panel" aria-labelledby="current-release">
+        <div>
+          <p class="release-label">Current stable release</p>
+          <h2 id="current-release">1.0.0</h2>
+          <p>Platform: Linux AMD64, for NAS devices reporting the <code>x86_64</code> architecture.</p>
+        </div>
+        <div class="release-actions">
+          <a class="button" href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-1.0.0-linux-amd64.tar">Download Docker image</a>
+          <a href="https://github.com/cc1158/jiaying-releases/releases/tag/v1.0.0">View full release</a>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>Download the required files</h2>
+        <div class="download-list">
+          <div>
+            <strong>Docker image archive</strong>
+            <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-1.0.0-linux-amd64.tar">family-media-server-1.0.0-linux-amd64.tar</a>
+          </div>
+          <div>
+            <strong>Image checksum</strong>
+            <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-1.0.0-linux-amd64.tar.sha256">family-media-server-1.0.0-linux-amd64.tar.sha256</a>
+          </div>
+          <div>
+            <strong>Configuration template</strong>
+            <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/config.nas.example.yaml">config.nas.example.yaml</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>Check the NAS architecture</h2>
+        <p>Run this command in a NAS terminal:</p>
+        <pre><code>uname -m</code></pre>
+        <p>Use the current image only when the result is <code>x86_64</code>. <code>aarch64</code> and <code>arm64</code> are not supported yet.</p>
+      </section>
+
+      <section class="document-section">
+        <h2>Verify the download</h2>
+        <p>Place the image archive and checksum file in the same directory, then run:</p>
+        <pre><code>sha256sum -c family-media-server-1.0.0-linux-amd64.tar.sha256</code></pre>
+        <p>To verify on a Mac, run:</p>
+        <pre><code>shasum -a 256 -c family-media-server-1.0.0-linux-amd64.tar.sha256</code></pre>
+        <p>Continue only after the check reports <code>OK</code>.</p>
+      </section>
+
+      <section class="document-section">
+        <h2>Import and create the container</h2>
+        <ol>
+          <li>Open Docker or Container Manager on the NAS and import the downloaded tar file under Images.</li>
+          <li>Create <code>config.yaml</code> from the template and update the media location for your NAS.</li>
+          <li>Create a container and map NAS port <code>8080</code> to container port <code>8080</code>.</li>
+          <li>Add the four volume mappings below and keep the default image command.</li>
+          <li>Set the restart policy to <code>unless-stopped</code> and the stop timeout to at least 30 seconds.</li>
+        </ol>
+        <div class="mapping-grid" role="table" aria-label="Container volume mappings">
+          <div role="row"><strong role="cell">NAS media directory</strong><code role="cell">/media/library</code><span role="cell">Read only</span></div>
+          <div role="row"><strong role="cell">Persistent data</strong><code role="cell">/data</code><span role="cell">Read and write</span></div>
+          <div role="row"><strong role="cell">config.yaml</strong><code role="cell">/app/config.yaml</code><span role="cell">Read only</span></div>
+          <div role="row"><strong role="cell">Program directory</strong><code role="cell">/opt/family-media/bin</code><span role="cell">Read only</span></div>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>Connect Jiaying</h2>
+        <p>After the container starts, open <code>http://your-NAS-local-address:8080/healthz</code> in a browser. When it returns <code>{"status":"ok"}</code>, add the same local NAS address in Jiaying.</p>
+        <div class="notice">
+          <p><strong>Use the server only on your home network.</strong></p>
+          <p>Do not expose its port directly to the internet. Never post a real server address, password, or token in a public issue.</p>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>Future updates</h2>
+        <p>After the first deployment, you can download the <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-linux-amd64">standalone server binary</a> and its <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-linux-amd64.sha256">SHA-256 checksum</a>. Stop the container and verify the new file before replacing the program in the mapped directory. Keep the original media directory and <code>/data</code>.</p>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <p>© 2026 Jiaying. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="../">Home</a>
+        <a href="../privacy/">Privacy</a>
+        <a href="../support/">Support</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

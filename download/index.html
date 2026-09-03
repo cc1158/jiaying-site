@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="下载并在家庭 NAS 上安装家映 Family Media 服务端。">
+  <link rel="canonical" href="https://cc1158.github.io/jiaying-site/download/">
+  <link rel="alternate" hreflang="zh-CN" href="https://cc1158.github.io/jiaying-site/download/">
+  <link rel="alternate" hreflang="en" href="https://cc1158.github.io/jiaying-site/en/download/">
+  <link rel="icon" href="../assets/app-icon.png">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <title>下载 NAS 服务端 | 家映</title>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <header class="site-header">
+    <div class="nav-shell">
+      <a class="brand" href="../">家映</a>
+      <nav class="site-nav" aria-label="主要导航">
+        <a href="./" aria-current="page">下载</a>
+        <a href="../privacy/">隐私</a>
+        <a href="../support/">支持</a>
+        <a href="../en/download/" lang="en" hreflang="en">English</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="page-shell">
+    <article class="document document-wide">
+      <header class="document-header">
+        <p class="eyebrow">Family Media</p>
+        <h1>在 NAS 上安装家映服务端</h1>
+        <p>使用 Family Media 读取 NAS 文件夹时，需要先部署这个服务端。如果你只连接已有的 Jellyfin，可以跳过本页。</p>
+      </header>
+
+      <section class="release-panel" aria-labelledby="current-release">
+        <div>
+          <p class="release-label">当前稳定版本</p>
+          <h2 id="current-release">1.0.0</h2>
+          <p>平台：Linux AMD64，适用于架构显示为 <code>x86_64</code> 的 NAS。</p>
+        </div>
+        <div class="release-actions">
+          <a class="button" href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-1.0.0-linux-amd64.tar">下载 Docker 镜像</a>
+          <a href="https://github.com/cc1158/jiaying-releases/releases/tag/v1.0.0">查看完整发布页</a>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>下载所需文件</h2>
+        <div class="download-list">
+          <div>
+            <strong>Docker 镜像包</strong>
+            <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-1.0.0-linux-amd64.tar">family-media-server-1.0.0-linux-amd64.tar</a>
+          </div>
+          <div>
+            <strong>镜像校验文件</strong>
+            <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-1.0.0-linux-amd64.tar.sha256">family-media-server-1.0.0-linux-amd64.tar.sha256</a>
+          </div>
+          <div>
+            <strong>配置模板</strong>
+            <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/config.nas.example.yaml">config.nas.example.yaml</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>确认 NAS 架构</h2>
+        <p>在 NAS 终端执行：</p>
+        <pre><code>uname -m</code></pre>
+        <p>只有结果为 <code>x86_64</code> 时才能使用当前镜像。<code>aarch64</code> 或 <code>arm64</code> 暂不支持，请不要强行导入。</p>
+      </section>
+
+      <section class="document-section">
+        <h2>校验下载</h2>
+        <p>把镜像包和校验文件放在同一目录，然后执行：</p>
+        <pre><code>sha256sum -c family-media-server-1.0.0-linux-amd64.tar.sha256</code></pre>
+        <p>如果在 Mac 上校验，使用：</p>
+        <pre><code>shasum -a 256 -c family-media-server-1.0.0-linux-amd64.tar.sha256</code></pre>
+        <p>只有显示 <code>OK</code> 后才继续导入。</p>
+      </section>
+
+      <section class="document-section">
+        <h2>导入并创建容器</h2>
+        <ol>
+          <li>打开 NAS 的 Docker 或 Container Manager，在“映像”中导入下载的 tar 文件。</li>
+          <li>从配置模板创建 <code>config.yaml</code>，按你的 NAS 路径修改媒体目录。</li>
+          <li>创建容器并把 NAS 端口 <code>8080</code> 映射到容器端口 <code>8080</code>。</li>
+          <li>按下表添加四个目录映射，启动命令保持镜像默认值。</li>
+          <li>将重启策略设为 <code>unless-stopped</code>，停止宽限期设为至少 30 秒。</li>
+        </ol>
+        <div class="mapping-grid" role="table" aria-label="容器目录映射">
+          <div role="row"><strong role="cell">NAS 媒体目录</strong><code role="cell">/media/library</code><span role="cell">只读</span></div>
+          <div role="row"><strong role="cell">持久化数据目录</strong><code role="cell">/data</code><span role="cell">读写</span></div>
+          <div role="row"><strong role="cell">config.yaml</strong><code role="cell">/app/config.yaml</code><span role="cell">只读</span></div>
+          <div role="row"><strong role="cell">程序目录</strong><code role="cell">/opt/family-media/bin</code><span role="cell">只读</span></div>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>连接家映</h2>
+        <p>容器启动后，在浏览器中访问 <code>http://你的NAS局域网地址:8080/healthz</code>。看到 <code>{"status":"ok"}</code> 后，在家映中添加同一个 NAS 局域网地址。</p>
+        <div class="notice">
+          <p><strong>仅限家庭局域网使用。</strong></p>
+          <p>不要将服务端端口直接暴露到互联网，也不要在公开 Issue 中发布真实服务器地址、密码或 Token。</p>
+        </div>
+      </section>
+
+      <section class="document-section">
+        <h2>后续更新</h2>
+        <p>已经完成首次部署的用户，可以从发布页下载 <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-linux-amd64">独立服务端程序</a>及其 <a href="https://github.com/cc1158/jiaying-releases/releases/download/v1.0.0/family-media-server-linux-amd64.sha256">SHA-256 校验文件</a>。停止容器并校验新文件后，再替换映射目录中的程序；不要删除原来的媒体目录或 <code>/data</code>。</p>
+      </section>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-shell">
+      <p>© 2026 家映。保留所有权利。</p>
+      <div class="footer-links">
+        <a href="../">首页</a>
+        <a href="../privacy/">隐私政策</a>
+        <a href="../support/">技术支持</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
+

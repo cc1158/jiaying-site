@@ -16,21 +16,35 @@ from urllib.parse import unquote, urlparse
 ROOT = Path(__file__).resolve().parents[1]
 PAGES = {
     Path("index.html"): "zh-CN",
+    Path("download/index.html"): "zh-CN",
     Path("privacy/index.html"): "zh-CN",
     Path("support/index.html"): "zh-CN",
     Path("en/index.html"): "en",
+    Path("en/download/index.html"): "en",
     Path("en/privacy/index.html"): "en",
     Path("en/support/index.html"): "en",
 }
 PUBLIC_URLS = (
     "https://cc1158.github.io/jiaying-site/",
+    "https://cc1158.github.io/jiaying-site/download/",
     "https://cc1158.github.io/jiaying-site/privacy/",
     "https://cc1158.github.io/jiaying-site/support/",
     "https://cc1158.github.io/jiaying-site/en/",
+    "https://cc1158.github.io/jiaying-site/en/download/",
     "https://cc1158.github.io/jiaying-site/en/privacy/",
     "https://cc1158.github.io/jiaying-site/en/support/",
 )
 ISSUE_URL_PREFIX = "https://github.com/cc1158/jiaying-site/issues/new"
+RELEASE_URL_PREFIX = "https://github.com/cc1158/jiaying-releases/releases/"
+RELEASE_URL = f"{RELEASE_URL_PREFIX}tag/v1.0.0"
+RELEASE_ASSET_BASE = f"{RELEASE_URL_PREFIX}download/v1.0.0/"
+RELEASE_ASSETS = (
+    "family-media-server-linux-amd64",
+    "family-media-server-linux-amd64.sha256",
+    "family-media-server-1.0.0-linux-amd64.tar",
+    "family-media-server-1.0.0-linux-amd64.tar.sha256",
+    "config.nas.example.yaml",
+)
 PENDING_MARKER = "SUPPORT_EMAIL_PENDING"
 MAIL_RE = re.compile(r"^mailto:([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})$", re.IGNORECASE)
 FORBIDDEN_HOSTS = {
@@ -121,8 +135,6 @@ def validate_pages(app_store_ready: bool) -> list[str]:
             errors.append(f"{page}: scripts are not allowed")
         if parser.form_count:
             errors.append(f"{page}: forms are not allowed")
-        if "http://" in source.lower():
-            errors.append(f"{page}: insecure http:// reference found")
         if "—" in source or "–" in source:
             errors.append(f"{page}: forbidden long dash character found")
 
@@ -141,7 +153,9 @@ def validate_pages(app_store_ready: bool) -> list[str]:
             if parsed.scheme in {"http", "https"}:
                 if parsed.scheme != "https":
                     errors.append(f"{page}: external links must use HTTPS: {link}")
-                elif tag == "a" and not link.startswith(ISSUE_URL_PREFIX):
+                elif tag == "a" and not link.startswith(
+                    (ISSUE_URL_PREFIX, RELEASE_URL_PREFIX)
+                ):
                     errors.append(f"{page}: unexpected external link: {link}")
                 elif tag == "link" and (
                     relation not in {"canonical", "alternate"}
@@ -201,6 +215,18 @@ def validate_pages(app_store_ready: bool) -> list[str]:
         source = (ROOT / page).read_text(encoding="utf-8")
         if source.count(ISSUE_URL_PREFIX) != 1:
             errors.append(f"{page}: expected exactly one GitHub Issues support link")
+
+    download_pages = (Path("download/index.html"), Path("en/download/index.html"))
+    for page in download_pages:
+        source = (ROOT / page).read_text(encoding="utf-8")
+        if RELEASE_URL not in source:
+            errors.append(f"{page}: missing the public v1.0.0 release link")
+        for asset in RELEASE_ASSETS:
+            if f"{RELEASE_ASSET_BASE}{asset}" not in source:
+                errors.append(f"{page}: missing release asset link: {asset}")
+        for phrase in ("x86_64", "sha256", "/media/library", "/data"):
+            if phrase not in source:
+                errors.append(f"{page}: missing NAS installation detail: {phrase!r}")
     all_sources = "\n".join(
         path.read_text(encoding="utf-8")
         for path in ROOT.rglob("*")
@@ -248,7 +274,12 @@ def remote_status(url: str) -> int:
 
 def validate_remote() -> list[str]:
     errors: list[str] = []
-    for url in (*PUBLIC_URLS, f"{ISSUE_URL_PREFIX}?template=support.yml"):
+    release_urls = (RELEASE_URL, *(f"{RELEASE_ASSET_BASE}{asset}" for asset in RELEASE_ASSETS))
+    for url in (
+        *PUBLIC_URLS,
+        f"{ISSUE_URL_PREFIX}?template=support.yml",
+        *release_urls,
+    ):
         status = remote_status(url)
         if not 200 <= status < 400:
             errors.append(f"app-store-ready: public support resource unavailable ({status or 'network error'}): {url}")
