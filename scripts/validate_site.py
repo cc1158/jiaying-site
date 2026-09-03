@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import sys
 import urllib.error
@@ -37,14 +38,27 @@ PUBLIC_URLS = (
 ISSUE_URL_PREFIX = "https://github.com/cc1158/jiaying-site/issues/new"
 RELEASE_URL_PREFIX = "https://github.com/cc1158/jiaying-releases/releases/"
 RELEASE_URL = f"{RELEASE_URL_PREFIX}tag/v1.0.0"
-RELEASE_ASSET_BASE = f"{RELEASE_URL_PREFIX}download/v1.0.0/"
-RELEASE_ASSETS = (
-    "family-media-server-linux-amd64",
-    "family-media-server-linux-amd64.sha256",
-    "family-media-server-1.0.0-linux-amd64.tar",
-    "family-media-server-1.0.0-linux-amd64.tar.sha256",
-    "config.nas.example.yaml",
+RELEASE_API_URL = (
+    "https://api.github.com/repos/cc1158/jiaying-releases/releases/tags/v1.0.0"
 )
+RELEASE_ASSET_BASE = f"{RELEASE_URL_PREFIX}download/v1.0.0/"
+RELEASE_ASSETS = {
+    "family-media-server-linux-amd64": (
+        "sha256:cf230e48f7131a2ece9e2fea0787b555a402d887010fa846078d4b58b223494b"
+    ),
+    "family-media-server-linux-amd64.sha256": (
+        "sha256:56120cf9a2eae39b4b814cea817e53f7147f2f6e2b31ec4a66b9e84c02fc2ea1"
+    ),
+    "family-media-server-1.0.0-linux-amd64.tar": (
+        "sha256:feee5f346e7ede1697bf8e844f49dff75a9896ebb5000a17a33206b3c983b30e"
+    ),
+    "family-media-server-1.0.0-linux-amd64.tar.sha256": (
+        "sha256:85495ec7be9e96c5e037e67c50a7ae057ae0fdf2c1e1c4cce0e44f00dd4143df"
+    ),
+    "config.nas.example.yaml": (
+        "sha256:06f941e98065223fe5c632eeefaeeab58aa6ee3841b3df736e4028f386e9389d"
+    ),
+}
 PENDING_MARKER = "SUPPORT_EMAIL_PENDING"
 MAIL_RE = re.compile(r"^mailto:([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})$", re.IGNORECASE)
 FORBIDDEN_HOSTS = {
@@ -272,17 +286,45 @@ def remote_status(url: str) -> int:
         return 0
 
 
+def validate_release_assets() -> list[str]:
+    errors: list[str] = []
+    request = urllib.request.Request(
+        RELEASE_API_URL,
+        headers={
+            "Accept": "application/vnd.github+json",
+            "User-Agent": "jiaying-site-validator/1.0",
+        },
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=12) as response:
+            release = json.load(response)
+    except (urllib.error.HTTPError, urllib.error.URLError, json.JSONDecodeError) as error:
+        return [f"app-store-ready: cannot inspect public release assets: {error}"]
+
+    assets = {asset.get("name"): asset for asset in release.get("assets", [])}
+    for name, expected_digest in RELEASE_ASSETS.items():
+        asset = assets.get(name)
+        if asset is None:
+            errors.append(f"app-store-ready: public release is missing asset: {name}")
+            continue
+        if asset.get("state") != "uploaded" or not asset.get("size"):
+            errors.append(f"app-store-ready: public release asset is incomplete: {name}")
+        if asset.get("digest") != expected_digest:
+            errors.append(f"app-store-ready: public release asset digest changed: {name}")
+    return errors
+
+
 def validate_remote() -> list[str]:
     errors: list[str] = []
-    release_urls = (RELEASE_URL, *(f"{RELEASE_ASSET_BASE}{asset}" for asset in RELEASE_ASSETS))
     for url in (
         *PUBLIC_URLS,
         f"{ISSUE_URL_PREFIX}?template=support.yml",
-        *release_urls,
+        RELEASE_URL,
     ):
         status = remote_status(url)
         if not 200 <= status < 400:
             errors.append(f"app-store-ready: public support resource unavailable ({status or 'network error'}): {url}")
+    errors.extend(validate_release_assets())
     return errors
 
 
